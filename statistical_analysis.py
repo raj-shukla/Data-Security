@@ -144,8 +144,8 @@ def FindAccuracy(X, outlier, method):
     return (tp, fp, fn, P, R, F)
 
 
-outliers_list = [{'p': 1, 'n': 0}, {'p': 2, 'n': 0}, {'p': 3, 'n': 0},
-                 {'p': 0, 'n': 1}, {'p': 0, 'n': 2}, {'p': 0, 'n': 3}]
+outliers_list = [{'p': 1, 'n': 0}, {'p': 0, 'n': 1}, {'p': 2, 'n': 0},
+                 {'p': 0, 'n': 2}, {'p': 3, 'n': 0}, {'p': 0, 'n': 3}]
 
 results = []
 methods = ['mean_statistics', 'robust_statistics', 'm_estimators']
@@ -153,18 +153,18 @@ mean_std_deviation = 10.97
 
 
 for method in methods:
-    for outlier in outliers_list:
-        magnitude = round(mean_std_deviation + mean_std_deviation/2, 2)
-        for i in range(0, 12):
+    magnitude = round(mean_std_deviation + mean_std_deviation/2, 2)
+    for i in range(0, 12):
+        for outlier in outliers_list:
             X = SegmentForAnalysis(sFlow, segment_size, outlier, magnitude)
             accuracy = FindAccuracy(X, outlier, method)
             r = (method, outlier['p'], outlier['n'], magnitude) + accuracy
-            if (i ==0):
-                magnitude = round(magnitude + mean_std_deviation/2, 2)
-            else:
-                magnitude = round(magnitude + mean_std_deviation, 2)
             results.append(r)
             print (r)
+        if (i ==0):
+            magnitude = round(magnitude + mean_std_deviation/2, 2)
+        else:
+            magnitude = round(magnitude + mean_std_deviation, 2)
 
 print (results)
 
