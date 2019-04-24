@@ -31,6 +31,9 @@ point=65
 filterSize = 3
 
 
+
+
+
 for i in range(0, 136):
     flowAtPoint = flowArray[:, :, i].flatten()
     for j in range(len(flowAtPoint) - filterSize):
@@ -39,11 +42,25 @@ for i in range(0, 136):
 #print(np.shape(sFlow))
 
 sFlow = np.asarray(sFlow)
+
 '''
-for i in range(0, 136):
-    plt.plot(sFlow[i, 0:7, :].T)
-    #plt.axis([-1, 32, 0, 1])
-    plt.show()
+plt.subplot(211)
+plt.plot(flowArray[0, :, 0])
+plt.xlabel("Time slot", fontsize=24)
+plt.ylabel("Traffic", fontsize=24)
+plt.axis([0, 288, 0, 340])
+plt.text(120, 290, "Actual traffic", fontsize=18)
+
+plt.subplot(212)
+plt.plot(sFlow[0, 0, :].T)
+plt.xlabel("Time slot", fontsize=24)
+plt.ylabel("Traffic", fontsize=24)
+plt.axis([0, 288, 0, 340])
+plt.text(120, 290, "Actual traffic", fontsize=18)
+
+plt.subplots_adjust(left=None, wspace=0.3, hspace=0.4, top=None)
+
+plt.show()
 '''
 
 

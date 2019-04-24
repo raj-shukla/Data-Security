@@ -110,11 +110,14 @@ def FindAccuracy(X, m_estimators, deviations, outliers, param):
         
     return (tp, fp, fn, P, R, F)
     
-outliers_list = [{'p': 1, 'n': 0}, {'p': 2, 'n': 0}, {'p': 3, 'n': 0},
-                 {'p': 0, 'n': 1}, {'p': 0, 'n': 2}, {'p': 0, 'n': 3},
-                 {'p': 1, 'n': 1}, {'p': 1, 'n': 2}, {'p': 2, 'n': 1},
-                 {'p': 2, 'n': 2}, {'p': 1, 'n': 3}, {'p': 3, 'n': 1},
-                 {'p': 2, 'n': 3}, {'p': 3, 'n': 2}, {'p': 3, 'n': 3}]
+#outliers_list = [{'p': 1, 'n': 0}, {'p': 2, 'n': 0}, {'p': 3, 'n': 0},
+                 #{'p': 0, 'n': 1}, {'p': 0, 'n': 2}, {'p': 0, 'n': 3},
+                 #{'p': 1, 'n': 1}, {'p': 1, 'n': 2}, {'p': 2, 'n': 1},
+                 #{'p': 2, 'n': 2}, {'p': 1, 'n': 3}, {'p': 3, 'n': 1},
+                 #{'p': 2, 'n': 3}, {'p': 3, 'n': 2}, {'p': 3, 'n': 3}]
+                 
+outliers_list = [{'p': 1, 'n': 0}, {'p': 0, 'n': 1}, {'p': 2, 'n': 0},
+                 {'p': 0, 'n': 2}, {'p': 3, 'n': 0}, {'p': 0, 'n': 3}]
 segment_size = 12
 results = []
 
@@ -143,7 +146,7 @@ with open("results.csv", mode="w") as f:
             writer.writerow(row)
 '''
 
-
+'''
 for outliers in outliers_list[9:10]:
     magnitude = 10.97 + 10.97 + 10.97 + 10.97 + 10.97
     for i in range(0, 1):
@@ -159,10 +162,33 @@ for outliers in outliers_list[9:10]:
         #magnitude = magnitude + 10
 
 print (results)
+'''
 
+
+magnitude = round(mean_std_deviation + mean_std_deviation/2, 2)
+for i in range(0, 12):
+    for outliers in outliers_list:
+        X = SegmentForAnalysis(sFlow, segment_size, outliers, magnitude)
+        m_estimators, deviations = FindParameters(X)
+        accuracy = FindAccuracy(X, m_estimators, deviations, outliers, param=1.5)
+        r = (outliers['p'], outliers['n'], magnitude) + accuracy
+        results.append(r)
+        print (r)
+    if (i ==0):
+        magnitude = round(magnitude + mean_std_deviation/2, 2)
+    else:
+        magnitude = round(magnitude + mean_std_deviation, 2)
+
+print (results)
+
+with open("results_statistics_2.csv", mode="w") as f:
+        writer = csv.writer(f)
+        for row in results:
+            writer.writerow(row)
+'''
 with open("results_parameter.csv", mode="a") as f:
         writer = csv.writer(f)
         for row in results:
             writer.writerow(row)
-
+'''
 
